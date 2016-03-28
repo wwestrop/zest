@@ -1,4 +1,4 @@
-#A exploration of code testability and state isolation
+#An exploration of code testability and state isolation
 
 ##Abstract
 Automated tests are incredibly useful, and yet the tools and techniques that are required can cause your code to become less easy to understand, which in turn can hamper correctness. This post elaborates on some of my thoughts, and introduces an experimental piece of software that attempts to provide the best of both worlds. I’m a little dissatisfied with the status quo and would like to change the world, if that’s not too cheesy :-)
