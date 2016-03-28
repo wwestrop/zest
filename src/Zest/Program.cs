@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Zest {
     class Program {
-        
+
         // auto-stubbing, automagically. 
         // in ctors or public properties, unless you override, they get stubs that do nothing, because why waste time populating them all
 
@@ -23,8 +23,9 @@ namespace Zest {
         // leave class as static and provide a static accessor for the instance of the singleton
         //    then, ........???? Code that uses this? That sets it
         //    ... overload all methods with the paramter of this static type and have the existing ones forward on to this call with new StaticThingy() ?  .... not sure that would work
-
-
+        //    ... Proxy it into a globally accessibly namespace and replace references with that one..
+        //    ... Then code could do Static.MyStaticThingamabob = 42, and the code under test would read back whatever you put. Method monkey patching same thing.
+        //    ... Make Static a new instance for each testcase - that way reinitialised every time, you can then override as you please
         static void Main(string[] args) {
 
             var fileToCompile = @"K:\Users\Will\Documents\visual studio 2013\Projects\Rosyln1\Rosyln1\DummyFile.cs";
