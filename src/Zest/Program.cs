@@ -8,10 +8,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using Microsoft.CodeAnalysis.MSBuild;
 
 namespace Zest {
     class Program {
-
+        
         // auto-stubbing, automagically. 
         // in ctors or public properties, unless you override, they get stubs that do nothing, because why waste time populating them all
 
@@ -26,6 +27,9 @@ namespace Zest {
         //    ... Proxy it into a globally accessibly namespace and replace references with that one..
         //    ... Then code could do Static.MyStaticThingamabob = 42, and the code under test would read back whatever you put. Method monkey patching same thing.
         //    ... Make Static a new instance for each testcase - that way reinitialised every time, you can then override as you please
+        //    ... Effectively "hoisting" every static thing into a single class all of their own. 
+
+
         static void Main(string[] args) {
 
             var fileToCompile = @"K:\Users\Will\Documents\visual studio 2013\Projects\Rosyln1\Rosyln1\DummyFile.cs";
@@ -40,12 +44,20 @@ namespace Zest {
 
 
 
+            // Load SLN. 
+            //MSBuildWorkspace
+            //Microsoft.CodeAnalysis.worksapces
+            //Workspace w;
+            //Microsoft.CodeAnalysis.Workspace.TryGetWorkspace(new SourceTextContainer(), out w);
+            var w = MSBuildWorkspace.Create();
 
 
 
             return;
 
             FindMethods(tree);
+
+            FindStaticMembers(tree);
 
             var parsetree = CSharpSyntaxTree.ParseText(stringText);
 
@@ -90,13 +102,18 @@ namespace Zest {
             //.InsertNodesAfter(null, new []{ CreateAutoSetter() });
 
             string s = publicProperties[0].ToFullString();
-                // 
-                // 
-                // 
-                // GetAccessorDeclaration
+            // 
+            // 
+            // 
+            // GetAccessorDeclaration
 
 
-            
+            // code says (or is rewritten to read):
+            // var now = DateTime.Now -> Statics.DateTime.Now;
+            //
+            // Your test code looks like:
+            // Statics.DateTime.Now = new DateTime(2015, 12, 05, 15, 00, 00);            // <---- fix the current time
+            // Statics.Reset();                                                          // Undo overrides test cases have made and put them back to their values as lifted when code was originalky rewritten. 
 
             //n2.First().Modifiers.Add(publicToken);
 
@@ -110,17 +127,27 @@ namespace Zest {
 
         }
 
+        private static void FindStaticMembers(SyntaxTree document) {
+
+            var rt = document.GetRoot();
+            var things = rt.DescendantNodes().OfType<MemberDeclarationSyntax>().ToList();
+
+            var staticToken = SyntaxFactory.Token(SyntaxKind.StaticKeyword);
+            var staticThings = rt.DescendantNodes()
+                .OfType<PropertyDeclarationSyntax>()
+                .Where(d => d.Modifiers.Any(m => m.Text == staticToken.Text))
+                .ToList();
+            
+            //MemberDeclarationSyntax md;
+            //PropertyDeclarationSyntax pd;
+
+        }
 
         private static void FindMethods(SyntaxTree document)
         {
             var rt = document.GetRoot();
             var methods = rt.DescendantNodes().OfType<MethodDeclarationSyntax>();
 
-            var r = new MethodRewriter();
-
-            foreach (var i in methods) {
-                r.foo(i);
-            }
 
             var publicToken = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
             //var varDec = SyntaxFactory.VariableDeclaration(SyntaxFactory.ty

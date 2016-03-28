@@ -14,7 +14,7 @@ namespace Zest {
     /// </summary>
     internal class MethodRewriter {
 
-        internal FieldDeclarationSyntax foo(MethodDeclarationSyntax f) {
+        internal FieldDeclarationSyntax foo(MethodDeclarationSyntax f) {            
 
             var retType = GetTypeName(f.ReturnType);
             var funcActionTypeParams = GetFuncTypesList(f);         // if zero ? if void ? if intrinsic type ? if reference type ? if parametric type ?
@@ -30,7 +30,7 @@ namespace Zest {
 
             var l = GetLambdaDeclSyntax(f);
 
-            var replacement = $"{s} = {l};";
+            var replacement = $"{s} = {l};\r\n\r\n";
 
 
             var parsed = SyntaxFactory.ParseSyntaxTree(replacement).GetRoot() as CompilationUnitSyntax;
@@ -46,7 +46,7 @@ namespace Zest {
         }
 
         private IEnumerable<string> /*TypeArgumentListSyntax*/ GetFuncTypesList(MethodDeclarationSyntax f) {
-
+            
             var l = new List<string>();
             l.AddRange(f.ParameterList.Parameters.Select(p => GetTypeName(p.Type)));
 
@@ -57,11 +57,11 @@ namespace Zest {
 
             return l;
         }
-
-
+        
+        
         private string GetTypeName(TypeSyntax f) {
             bool isVoid = f is PredefinedTypeSyntax && ((PredefinedTypeSyntax)f).Keyword.Text == "void";
-            if (isVoid) {
+            if(isVoid) {
                 return null;
             }
 
