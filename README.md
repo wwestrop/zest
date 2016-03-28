@@ -262,5 +262,5 @@ class Program {
 }
 ```
 
-Everything in moderation, including moderation itself. Don’t let the desire for clear code stop you from using DI, and don’t let a desire for testability make you go over-the-top with layers of indirection. This is an issue of judgement, so everyone will have a different opinion on how much is too much.
+This is overkill in my opinion. Everything in moderation, including moderation itself. Don’t let the desire for clear code stop you from using DI, and don’t let a desire for testability make you go over-the-top with layers of indirection. This is an issue of judgement, so everyone will have a different opinion on how much is too much.
 As David J. Wheeler once said, “All problems in computer science can be solved by another level of indirection... Except for the problem of too many layers of indirection”.
