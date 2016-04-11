@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.MSBuild;
+using System;
 
 namespace Zest {
     class Program {
@@ -32,7 +33,11 @@ namespace Zest {
 
         static void Main(string[] args) {
 
-            var fileToCompile = @"K:\Users\Will\Documents\visual studio 2013\Projects\Rosyln1\Rosyln1\DummyFile.cs";
+            if(args.Length != 1) {
+                throw new ArgumentException("Expected filename to transform");
+            }
+
+            var fileToCompile = args[0];
             var source = File.ReadAllText(fileToCompile);
 
             var stringText = SourceText.From(source, Encoding.UTF8);

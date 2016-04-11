@@ -2,6 +2,9 @@
 
 namespace Zest {
 
+    /// <summary>
+    /// Not actually a part of the solution - this file is read and manipulated by zest transformations
+    /// </summary>
     class DummyFile {
 
         public int Prop { get; private set; }
