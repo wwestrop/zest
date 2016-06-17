@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,10 +37,12 @@ namespace Zest {
             return r;
         }
 
+        /// <summary>
+        /// Converts a standard method (<c>MethodDeclarationSyntax</c>) into equivalent lambda syntax
+        /// i.e. public void Add(int a, int b) { return a + b; } is converted to (int a, int b) => { return a + b; }
+        /// </summary>
         private string GetLambdaDeclSyntax(MethodDeclarationSyntax f) {
-
             var s = $"({ string.Join(", ", f.ParameterList.Parameters) }) => { f.Body.ToString() }";
-
             return s;
         }
 

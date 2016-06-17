@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -58,7 +55,7 @@ namespace Zest {
 
 
 
-            return;
+           // return;
 
             FindMethods(tree);
 
@@ -96,7 +93,9 @@ namespace Zest {
             // setter not even there -> rewrite get expr into variable read, add setter to set this var in test code
             //            -- or, rewrite as func execution, and let the setter be assigned as a func in testing code (probably too much logic in tests)
 
-            var unexposedSetters = publicProperties.Select(p => p.AccessorList.Accessors.SingleOrDefault(a => a.Keyword.Text != getToken.Text)).ToList();
+            var unexposedSetters = publicProperties
+                .Select(p => p.AccessorList.Accessors.SingleOrDefault(a => a.Keyword.Text != getToken.Text))
+                .ToList();
 
             // remove existing setter, if any
             var e = publicProperties[0].AccessorList.WithAccessors(new SyntaxList<AccessorDeclarationSyntax> { CreateAutoSetter() });
