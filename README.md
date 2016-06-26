@@ -1,3 +1,7 @@
+|!  This project is a thought experiment. It is no longer being actively worked on            |
+|---------------------------------------------------------------------------------------------|
+
+
 #An exploration of code testability and state isolation
 
 ##Abstract
